@@ -1,33 +1,45 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityStandardAssets.CrossPlatformInput;
 
 public class ShipController : MonoBehaviour
 {
-    [Tooltip("In m/s")][SerializeField] float xSpeed;
-	[Tooltip("In m/s")] [SerializeField] float ySpeed;
+    [Tooltip("In m/s")][SerializeField] float xSpeed = 10f;
+	[Tooltip("In m/s")] [SerializeField] float ySpeed = 8f;
 	[SerializeField] float pitchFactor = -3f;
 	[SerializeField] float yawFactor = 3f;
+	Rigidbody rigidBody;
+	bool isControlEnabled = true;
+
 
 	// Start is called before the first frame update
-	void Start()
-    {
-    }
 
     // Update is called once per frame
     void Update()
 	{
-		UpdateTransform();
-		UpdateRotation();
+		if (isControlEnabled == true)
+		{
+			UpdateTransform();
+			UpdateRotation();
+		}
+
 	}
 
+
+	void OnPlayerDeath()
+	{
+		print("Death");
+		isControlEnabled = false;
+	}
 	public void UpdateTransform()
 	{
-		float xThrow = CrossPlatformInputManager.GetAxis("Horizontal");
-		float yThrow = CrossPlatformInputManager.GetAxis("Vertical");
+		float xThrow = Input.GetAxis("Horizontal");
+		float yThrow = Input.GetAxis("Vertical");
 
-		// Position
+
+
+		// Position on Screen
 		float xOffset = xSpeed * xThrow * Time.deltaTime;
 		float yOffset = ySpeed * yThrow * Time.deltaTime;
 		float rawNewXPos = Mathf.Clamp(transform.localPosition.x + xOffset, -8f, 8f);
@@ -39,10 +51,15 @@ public class ShipController : MonoBehaviour
 
 
 	}
+	private void OnTriggerEnter(Collider other)
+	{
+		
+	}
 	public void UpdateRotation()
 	{
-		float xThrow = CrossPlatformInputManager.GetAxis("Horizontal");
-		float yThrow = CrossPlatformInputManager.GetAxis("Vertical");
+		float xThrow = Input.GetAxis("Horizontal");
+		float yThrow = Input.GetAxis("Vertical");
+		
 
 		float pitch = transform.localPosition.y * pitchFactor + yThrow * -10f;
 		float yaw = transform.localPosition.x * yawFactor;
