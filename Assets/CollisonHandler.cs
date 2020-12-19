@@ -11,7 +11,7 @@ public class CollisonHandler : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        Invoke("GodModeOff", 1f);
     }
 	private void OnTriggerEnter(Collider other)
 	{
@@ -29,5 +29,10 @@ public class CollisonHandler : MonoBehaviour
 	{
 		SceneManager.LoadScene(0);
 
+	}
+    void GodModeOff()
+	{
+        gameObject.GetComponent<BoxCollider>().enabled = true;
+        
 	}
 }

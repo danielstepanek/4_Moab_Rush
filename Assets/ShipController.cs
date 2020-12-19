@@ -9,7 +9,7 @@ public class ShipController : MonoBehaviour
 	[Tooltip("In m/s")] [SerializeField] float ySpeed = 8f;
 	[SerializeField] float pitchFactor = -3f;
 	[SerializeField] float yawFactor = 3f;
-	Rigidbody rigidBody;
+	[SerializeField] GameObject[] guns;
 	bool isControlEnabled = true;
 
 
@@ -22,6 +22,7 @@ public class ShipController : MonoBehaviour
 		{
 			UpdateTransform();
 			UpdateRotation();
+			ProcessFiring();
 		}
 
 	}
@@ -55,7 +56,7 @@ public class ShipController : MonoBehaviour
 	{
 		
 	}
-	public void UpdateRotation()
+	void UpdateRotation()
 	{
 		float xThrow = Input.GetAxis("Horizontal");
 		float yThrow = Input.GetAxis("Vertical");
@@ -66,5 +67,22 @@ public class ShipController : MonoBehaviour
 		float roll = xThrow * -20f;
 
 		transform.localRotation = Quaternion.Euler(pitch, yaw, roll);
+	}
+	void ProcessFiring()
+	{
+		if (Input.GetKey(KeyCode.Space) == true)
+		{
+			foreach (GameObject gun in guns)
+			{
+				gun.SetActive(true);
+			}
+		}
+		else
+		{
+			foreach (GameObject gun in guns)
+			{
+				gun.SetActive(false);
+			}
+		}
 	}
 }
